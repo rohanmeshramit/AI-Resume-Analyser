@@ -1,0 +1,827 @@
+/* ================================
+   FONTS
+   ================================ */
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap');
+
+
+/* ================================
+   RESET
+   ================================ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+/* ================================
+   CSS VARIABLES — COLOR SYSTEM
+   All colors in the project use these variables.
+   Never use hardcoded hex values outside this block.
+   ================================ */
+:root {
+  /* Backgrounds — darkest to lightest */
+  --bg:       #0b0c10;
+  --surface:  #13151c;
+  --surface2: #1a1d27;
+  --surface3: #21253a;
+
+  /* Borders */
+  --border:  #2a2f45;
+  --border2: #353b55;
+
+  /* Text — primary to muted */
+  --text:  #e8eaf6;
+  --text2: #8b91b0;
+  --text3: #555d7a;
+
+  /* Accent — used on buttons, highlights, gauge stroke */
+  --accent:  #6c8bff;
+  --accent2: #a78bfa;
+
+  /* Semantic colors */
+  --success: #34d399;
+  --danger:  #f87171;
+  --warning: #fbbf24;
+}
+
+
+/* ================================
+   BASE
+   ================================ */
+body {
+  background-color: var(--bg);
+  color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* Headings use Syne — body text uses Instrument Sans */
+h1, h2, h3, h4 {
+  font-family: 'Syne', sans-serif;
+}
+
+
+/* ================================
+   LAYOUT — TWO PANEL
+   ================================ */
+.app-layout {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.left-panel {
+  width: 300px;
+  min-width: 300px;
+  background-color: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.right-panel {
+  flex: 1;
+  background-color: var(--bg);
+  padding: 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Keeps empty state text centered while pushing chart below it */
+.right-panel .empty-results {
+  flex: 1;
+  min-height: 200px;
+}
+
+
+/* ================================
+   LEFT PANEL — LOGO
+   ================================ */
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.logo-icon {
+  font-size: 24px;
+  color: var(--accent);
+}
+
+.logo-text {
+  font-family: 'Syne', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+
+/* ================================
+   LEFT PANEL — SECTION WRAPPER
+   Used for Resume, Job Description, History sections
+   ================================ */
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Small uppercase label above each input section */
+.section-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+
+/* ================================
+   LEFT PANEL — UPLOAD AREA
+   ================================ */
+.upload-area {
+  border: 1.5px dashed var(--border2);
+  border-radius: 10px;
+  padding: 24px 16px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.upload-area:hover {
+  border-color: var(--accent);
+  background-color: var(--surface2);
+}
+
+/* Selected state — turns green when a valid PDF is chosen */
+.upload-area.selected {
+  border-color: var(--success);
+  background-color: var(--surface2);
+}
+
+.upload-area.selected .upload-hint {
+  color: var(--success);
+}
+
+/* Truncates long filenames with ellipsis instead of wrapping */
+.upload-hint {
+  color: var(--text3);
+  font-size: 13px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+
+/* ================================
+   LEFT PANEL — JOB DESCRIPTION
+   ================================ */
+.job-input {
+  background-color: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  color: var(--text);
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 14px;
+  resize: vertical;
+  min-height: 100px;
+  transition: border-color 0.2s;
+  outline: none;
+}
+
+.job-input:focus {
+  border-color: var(--accent);
+}
+
+.job-input::placeholder {
+  color: var(--text3);
+}
+
+
+/* ================================
+   LEFT PANEL — ANALYSE BUTTON
+   Gradient accent is intentional — primary CTA of the app
+   ================================ */
+.analyse-btn {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 13px;
+  font-family: 'Syne', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.analyse-btn:hover {
+  opacity: 0.88;
+  transform: translateY(-1px);
+}
+
+.analyse-btn:active {
+  transform: translateY(0px);
+}
+
+
+/* ================================
+   LEFT PANEL — HISTORY
+   ================================ */
+.history-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.empty-state {
+  color: var(--text3);
+  font-size: 13px;
+}
+
+.history-entry {
+  background-color: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+
+.history-entry:hover {
+  border-color: var(--border2);
+  background-color: var(--surface3);
+}
+
+.history-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  color: var(--text3);
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.2s;
+  margin-left: auto;
+}
+
+.delete-btn:hover {
+  color: var(--danger);
+}
+
+.history-version {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Score badge — color class applied dynamically by JavaScript */
+.history-score {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+}
+
+.score-high {
+  background-color: rgba(52, 211, 153, 0.12);
+  color: var(--success);
+}
+
+.score-mid {
+  background-color: rgba(251, 191, 36, 0.12);
+  color: var(--warning);
+}
+
+.score-low {
+  background-color: rgba(248, 113, 113, 0.12);
+  color: var(--danger);
+}
+
+.history-job {
+  font-size: 12px;
+  color: var(--text2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.history-time {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+
+/* ================================
+   RIGHT PANEL — EMPTY STATE
+   ================================ */
+.empty-results {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text3);
+  font-size: 15px;
+}
+
+
+/* ================================
+   RIGHT PANEL — ERROR BANNER
+   ================================ */
+.error-banner {
+  background-color: rgba(248, 113, 113, 0.1);
+  border: 1px solid rgba(248, 113, 113, 0.3);
+  border-radius: 10px;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.error-icon {
+  font-size: 16px;
+  color: var(--danger);
+  flex-shrink: 0;
+}
+
+.error-message {
+  color: var(--danger);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+
+/* ================================
+   RIGHT PANEL — RESULTS LAYOUT
+   ================================ */
+.results-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Gauge and summary sit side by side in the top row */
+.top-row {
+  display: flex;
+  gap: 16px;
+}
+
+/* Shared card base — all result cards use this pattern */
+.gauge-card,
+.summary-card,
+.improvements-card,
+.keywords-card,
+.sections-card,
+.bullets-card,
+.chart-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Overrides for cards that need different alignment or sizing */
+.gauge-card {
+  align-items: center;
+  min-width: 180px;
+  gap: 12px;
+}
+
+.summary-card {
+  flex: 1;
+  gap: 12px;
+}
+
+.improvements-card,
+.keywords-card,
+.sections-card {
+  gap: 16px;
+}
+
+.bullets-card {
+  margin-bottom: 16px;
+}
+
+.chart-card {
+  margin-top: 8px;
+  margin-bottom: 16px;
+}
+
+/* Small uppercase label used at the top of every card */
+.card-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+
+/* ================================
+   RIGHT PANEL — GAUGE
+   SVG circle with animated stroke-dashoffset
+   ================================ */
+.gauge-container {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+/* Rotated -90deg so the arc starts at 12 o'clock, not 3 o'clock */
+.gauge-svg {
+  width: 120px;
+  height: 120px;
+  transform: rotate(-90deg);
+}
+
+.gauge-bg {
+  fill: none;
+  stroke: var(--surface3);
+  stroke-width: 10;
+}
+
+.gauge-fill {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 10;
+  stroke-linecap: round;
+  /* dasharray = circumference (2 * π * 50 ≈ 314) — one full circle dash */
+  stroke-dasharray: 314;
+  /* dashoffset starts at full circumference = fully hidden */
+  stroke-dashoffset: 314;
+  /* JS sets the final offset value — CSS animates the transition */
+  transition: stroke-dashoffset 1.2s ease, stroke 0.3s ease;
+}
+
+/* Score number centered over the SVG using absolute positioning */
+.gauge-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.gauge-number {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1;
+}
+
+.gauge-unit {
+  font-size: 11px;
+  color: var(--text3);
+}
+
+
+/* ================================
+   RIGHT PANEL — SUMMARY
+   ================================ */
+.summary-text {
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+/* ================================
+   RIGHT PANEL — IMPROVEMENTS
+   ================================ */
+.improvements-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.improvements-list li {
+  color: var(--text2);
+  font-size: 14px;
+  padding-left: 16px;
+  position: relative;
+  line-height: 1.6;
+}
+
+/* Arrow indicator before each improvement */
+.improvements-list li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: var(--accent);
+}
+
+
+/* ================================
+   RIGHT PANEL — KEYWORDS
+   ================================ */
+.keywords-body {
+  display: flex;
+  gap: 32px;
+}
+
+.keyword-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1;
+}
+
+.keyword-group-label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.keyword-group-label.present { color: var(--success); }
+.keyword-group-label.missing  { color: var(--danger); }
+
+.keyword-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+/* Semi-transparent backgrounds so tags don't overpower the content */
+.tag.present {
+  background-color: rgba(52, 211, 153, 0.12);
+  color: var(--success);
+  border: 1px solid rgba(52, 211, 153, 0.25);
+}
+
+.tag.missing {
+  background-color: rgba(248, 113, 113, 0.12);
+  color: var(--danger);
+  border: 1px solid rgba(248, 113, 113, 0.25);
+}
+
+
+/* ================================
+   RIGHT PANEL — SECTION BREAKDOWN
+   ================================ */
+.sections-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.section-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-name {
+  font-size: 13px;
+  color: var(--text2);
+  width: 130px;
+  min-width: 130px;
+}
+
+.section-bar-track {
+  flex: 1;
+  height: 6px;
+  background-color: var(--surface3);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+/* Bar starts at 0 — JS sets target width after a short delay so CSS transition fires */
+.section-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  width: 0%;
+  transition: width 1s ease;
+}
+
+.section-score {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  width: 32px;
+  text-align: right;
+}
+
+
+/* ================================
+   RIGHT PANEL — BULLET REWRITER
+   ================================ */
+.bullets-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.bullet-item {
+  background-color: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.bullet-text {
+  color: var(--text2);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Hidden by default — shown by JS after successful rewrite */
+.bullet-rewritten {
+  color: var(--success);
+  font-size: 14px;
+  line-height: 1.6;
+  display: none;
+}
+
+.rewrite-btn {
+  align-self: flex-start;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  border-radius: 8px;
+  padding: 6px 16px;
+  color: #fff;
+  font-family: 'Instrument Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+}
+
+.rewrite-btn:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+
+.rewrite-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+/* ================================
+   RIGHT PANEL — CHART
+   ================================ */
+.chart-card canvas {
+  max-height: 180px;
+}
+
+
+/* ================================
+   SCROLLBAR
+   Custom thin scrollbar for webkit browsers (Chrome, Edge, Safari)
+   ================================ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--border2);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--text3);
+}
+
+/* ================================
+   LOADING SPINNER
+   ================================ */
+.loading-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 200px;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--surface3);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loading-text {
+  color: var(--text3);
+  font-size: 14px;
+}
+
+/* ================================
+   RESPONSIVE — MOBILE
+   Applies only on screens narrower than 768px
+   Desktop styles above are completely unchanged
+   ================================ */
+@media (max-width: 768px) {
+
+  /* Stack panels vertically instead of side by side */
+  .app-layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+  }
+
+  .left-panel {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .right-panel {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .logo-text {
+    font-size: 18px;
+  }
+
+  /* Gauge and summary stack vertically on mobile */
+  .top-row {
+    flex-direction: column;
+  }
+
+  .gauge-card {
+    min-width: 100%;
+  }
+
+  /* Present and missing keyword groups stack vertically */
+  .keywords-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .analyse-btn {
+    width: 100%;
+  }
+
+  /* Limit history height on mobile — scrollable within fixed area */
+  .history-list {
+    max-height: 250px;
+    overflow-y: auto;
+  }
+
+}
+
+.bullets-card {
+    margin-bottom: 5px;
+  }
+
+  .chart-card {
+    margin-top: 0;
+    margin-bottom: 8px;
+  }

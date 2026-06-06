@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Resume Analyser</title>
+
+  <!-- Favicon — blue rounded square with white R, matches accent color -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c8bff'/><text x='50' y='72' font-size='60' font-family='sans-serif' font-weight='bold' text-anchor='middle' fill='white'>R</text></svg>">
+
+  <!-- Google Fonts — Syne for headings, Instrument Sans for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700&family=Instrument+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- Chart.js CDN — must load before script.js so renderChart() can use it -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+  <div class="app-layout">
+
+    <!-- ========================
+         LEFT PANEL
+         ======================== -->
+    <aside class="left-panel">
+
+      <!-- Logo -->
+      <div class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">ResumeAI</span>
+      </div>
+
+      <!-- Resume upload -->
+      <div class="section">
+        <label class="section-label">Resume</label>
+        <div class="upload-area" id="uploadArea">
+          <p class="upload-hint">Drop your PDF here or click to browse</p>
+          <!-- Hidden input — triggered programmatically when upload area is clicked -->
+          <input type="file" id="resumeInput" accept=".pdf" hidden>
+        </div>
+      </div>
+
+      <!-- Job description -->
+      <div class="section">
+        <label class="section-label">Job Description</label>
+        <textarea
+          class="job-input"
+          id="jobInput"
+          placeholder="Paste the job description here...">
+        </textarea>
+      </div>
+
+      <!-- Analyse button -->
+      <button class="analyse-btn" id="analyseBtn">
+        Analyse Resume
+      </button>
+
+      <!-- Version history — populated by JavaScript on page load -->
+      <div class="section">
+        <label class="section-label">History</label>
+        <div class="history-list" id="historyList">
+          <p class="empty-state">No analyses yet.</p>
+        </div>
+      </div>
+
+    </aside>
+
+
+    <!-- ========================
+         RIGHT PANEL
+         ======================== -->
+    <main class="right-panel">
+
+      <!-- Error banner — hidden by default, shown by showError() in script.js -->
+      <div class="error-banner" id="errorBanner" style="display:none;">
+        <span class="error-icon">⚠</span>
+        <span class="error-message" id="errorMessage">Something went wrong.</span>
+      </div>
+      
+      <!-- Loading spinner — shown while analysis is in progress -->
+<div class="loading-state" id="loadingState" style="display:none;">
+  <div class="spinner"></div>
+  <p class="loading-text">Analysing your resume...</p>
+</div>
+
+      <!-- Empty state — shown before first analysis -->
+      <div class="empty-results" id="emptyState">
+        <p>Upload a resume and paste a job description to get started.</p>
+      </div>
+
+      <!-- Results panel — hidden until analysis completes -->
+      <div class="results-panel" id="resultsPanel" style="display:none;">
+
+        <!-- Top row: match score gauge + summary -->
+        <div class="top-row">
+
+          <!-- Animated SVG circular gauge -->
+          <div class="gauge-card">
+            <p class="card-label">Match Score</p>
+            <div class="gauge-container">
+              <svg class="gauge-svg" viewBox="0 0 120 120">
+                <!-- Background ring -->
+                <circle class="gauge-bg" cx="60" cy="60" r="50"/>
+                <!-- Foreground arc — stroke-dashoffset animated by JavaScript -->
+                <circle class="gauge-fill" id="gaugeFill" cx="60" cy="60" r="50"/>
+              </svg>
+              <!-- Score number centered over the SVG -->
+              <div class="gauge-text">
+                <span class="gauge-number" id="gaugeNumber">0</span>
+                <span class="gauge-unit">/ 100</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- AI-generated overall summary -->
+          <div class="summary-card">
+            <p class="card-label">Summary</p>
+            <p class="summary-text" id="summaryText"></p>
+          </div>
+
+        </div>
+
+        <!-- Keyword gap — green tags present, red tags missing -->
+        <div class="keywords-card">
+          <p class="card-label">Keywords</p>
+          <div class="keywords-body">
+            <div class="keyword-group">
+              <p class="keyword-group-label present">Present</p>
+              <div class="keyword-tags" id="presentTags"></div>
+            </div>
+            <div class="keyword-group">
+              <p class="keyword-group-label missing">Missing</p>
+              <div class="keyword-tags" id="missingTags"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Section scores — five animated progress bars -->
+        <div class="sections-card">
+          <p class="card-label">Section Breakdown</p>
+          <div class="sections-list" id="sectionsList"></div>
+        </div>
+
+        <!-- Improvement suggestions -->
+        <div class="improvements-card">
+          <p class="card-label">Improvements</p>
+          <ul class="improvements-list" id="improvementsList"></ul>
+        </div>
+
+        <!-- Weak bullet rewriter — hidden if no weak bullets found -->
+        <div class="bullets-card" id="bulletsCard" style="display:none;">
+          <p class="card-label">Weak Bullet Points</p>
+          <div class="bullets-list" id="bulletsList"></div>
+        </div>
+
+      </div><!-- end #resultsPanel -->
+
+      <!-- Score trend chart — outside resultsPanel so it shows on page load
+           when history exists, even before a new analysis is run -->
+      <div class="chart-card" id="chartCard" style="display:none;">
+        <p class="card-label">Score Trend</p>
+        <canvas id="scoreTrendChart" style="height: 200px !important;"></canvas>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- script.js loaded at end of body — DOM must exist before JS runs -->
+  <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
