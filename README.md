@@ -31,6 +31,7 @@ Gemini API.
   and API rate limits
 - **Responsive Design** — works on mobile and desktop
 - **Dark UI** — clean, product-grade interface inspired by Linear and Vercel
+- **Delete History** — remove individual analysis entries from version history
 
 ---
 
