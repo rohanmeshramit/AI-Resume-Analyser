@@ -7,6 +7,8 @@ section-by-section ratings, and AI-generated improvement suggestions.
 Built as a full-stack portfolio project using Python Flask and the Google
 Gemini API.
 
+**Live Demo:** [rohanmeshramit.pythonanywhere.com](https://rohanmeshramit.pythonanywhere.com)
+
 ---
 
 ## Demo
