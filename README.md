@@ -130,6 +130,9 @@ AI-Resume-Analyser/
   data — only match scores, timestamps, and job description snippets.
 - **Version numbering** — version numbers do not renumber after a history entry
   is deleted
+- **API rate limits** — the free Gemini tier may occasionally 
+  return a "busy" error during high usage or rapid consecutive 
+  requests; simply wait a few seconds and try again
 
 ---
 
