@@ -124,7 +124,10 @@ AI-Resume-Analyser/
 
 - **Free tier limit** — Gemini free tier allows approximately 20 analyses per day
 - **Text PDFs only** — scanned image-based PDFs are not supported (no OCR)
-- **Single user** — no authentication; designed for personal use
+- **Single user** — designed for personal use on a local system; 
+  the live demo is a public preview only. Analysis history is visible 
+  to all visitors on the live app but contains no personal or sensitive 
+  data — only match scores, timestamps, and job description snippets.
 - **Version numbering** — version numbers do not renumber after a history entry
   is deleted
 
